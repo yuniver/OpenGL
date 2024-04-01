@@ -1,10 +1,11 @@
 ﻿#include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include "Shadow.h"
+#include <assert.h>
+#include "OpenGlManager.h"
+#include "Shader.h"
 
-
-int Shadow::InitOpenGl()
+int OpenGlManager::InitOpenGl()
 {
 	/* Initialize the library */
 	if (!glfwInit())
@@ -29,7 +30,7 @@ int Shadow::InitOpenGl()
 		return -1;
 	}
 
-	glfwMakeContextCurrent(window);    
+	glfwMakeContextCurrent(window);
 
 	//初始化glad
 	if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
@@ -39,49 +40,13 @@ int Shadow::InitOpenGl()
 	}
 
 
-	//添加顶点着色器
-	unsigned int vertexShader = glCreateShader(GL_VERTEX_SHADER);
-	const char* vertexShaderSource = GetVertexShader();
-	glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-	glCompileShader(vertexShader);
-	//检查顶点着色器编译错误
-	int success;
-	char infoLog[512];
-	glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(vertexShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::VERTEX::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-	//添加片段着色器
-	unsigned int fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-	const char* fragmentShaderSource = GetFragmentShader();
-	glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-	glCompileShader(fragmentShader);
-	//检查片段着色器编译错误
-	glGetShaderiv(fragmentShader, GL_COMPILE_STATUS, &success);
-	if (!success)
-	{
-		glGetShaderInfoLog(fragmentShader, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::FRAGMENT::COMPILATION_FAILED\n" << infoLog << std::endl;
-	}
-	//链接着色器
-	unsigned int shaderProgram = glCreateProgram();
-	glAttachShader(shaderProgram, vertexShader);
-	glAttachShader(shaderProgram, fragmentShader);
-	glLinkProgram(shaderProgram);
-	//检查链接错误
-	glGetProgramiv(shaderProgram, GL_LINK_STATUS, &success);
-	if (!success) {
-		glGetProgramInfoLog(shaderProgram, 512, NULL, infoLog);
-		std::cout << "ERROR::SHADER::PROGRAM::LINK_FAILED\n" << infoLog << std::endl;
-	}
-
+	//Shader shader(GetVertexShader(), GetFragmentShader());
+	Shader shader("Assets/shader/Basic.shader");
 
 	glViewport(0, 0, SCR_WIDTH, SCR_HEIGHT);
 	glClearColor(0.2f, 0.3f, 0.3f, 1.0f);
 
-	Awake();
+	Prepare();
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -95,6 +60,9 @@ int Shadow::InitOpenGl()
 		OnRender();
 		glClear(GL_COLOR_BUFFER_BIT);
 
+		//shader.use();
+
+		ShowErrorMessage(glGetError());
 		/* 交换前后图像缓冲区 */
 		glfwSwapBuffers(window);
 
@@ -107,7 +75,7 @@ int Shadow::InitOpenGl()
 	return 0;
 }
 
-void Shadow::processInput(GLFWwindow* window)
+void OpenGlManager::processInput(GLFWwindow* window)
 {
 	if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS)
 		glfwSetWindowShouldClose(window, true);
@@ -137,7 +105,7 @@ void Shadow::processInput(GLFWwindow* window)
 	}
 }
 
-const char* Shadow::GetVertexShader()
+const char* OpenGlManager::GetVertexShader()
 {
 	return "#version 330 core\n"
 		"layout (location = 0) in vec3 aPos;\n"
@@ -147,7 +115,7 @@ const char* Shadow::GetVertexShader()
 		"}\0";
 }
 
-const char* Shadow::GetFragmentShader()
+const char* OpenGlManager::GetFragmentShader()
 {
 	return "#version 330 core\n"
 		"out vec4 FragColor;\n"
@@ -157,25 +125,57 @@ const char* Shadow::GetFragmentShader()
 		"}\n\0";
 }
 
-void Shadow::Awake()
+void OpenGlManager::ShowErrorMessage(GLenum errorCode)
 {
-
+	if (errorCode == GL_NO_ERROR)
+	{
+		return;
+	}
+	switch (errorCode)
+	{
+	case GL_INVALID_ENUM:
+		std::cout << "GL_INVALID_ENUM" << std::endl;
+		break;
+	case GL_INVALID_VALUE:
+		std::cout << "GL_INVALID_VALUE" << std::endl;
+		break;
+	case GL_INVALID_OPERATION:
+		std::cout << "GL_INVALID_OPERATION" << std::endl;
+		break;
+	case GL_INVALID_FRAMEBUFFER_OPERATION:
+		std::cout << "GL_INVALID_FRAMEBUFFER_OPERATION" << std::endl;
+		break;
+	case GL_OUT_OF_MEMORY:
+		std::cout << "GL_OUT_OF_MEMORY" << std::endl;
+		break;
+	default:
+		std::cout << "UNKONWN" << std::endl;
+		break;
+	}
 }
 
-void Shadow::Update()
+void OpenGlManager::Prepare()
+{
+	//创建VBO
+	unsigned int vbo = 0;
+	glGenBuffers(1, &vbo);
+}
+
+void OpenGlManager::Update()
 {
 	//input
 	processInput(window);
 }
 
-void Shadow::LateUpdate()
+void OpenGlManager::LateUpdate()
+{
+
+}
+
+void OpenGlManager::OnRender()
 {
 }
 
-void Shadow::OnRender()
-{
-}
-
-void Shadow::OnDestroy()
+void OpenGlManager::OnDestroy()
 {
 }

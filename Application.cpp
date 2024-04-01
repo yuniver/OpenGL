@@ -1,11 +1,11 @@
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <iostream>
-#include "src/cpp/Shadow.h"
+#include "src/cpp/OpenGlManager.h"
 
 
 int main(void)
 {
-    Shadow shadowMapping;
-    return shadowMapping.InitOpenGl();
+    OpenGlManager gameInstance;
+    return gameInstance.InitOpenGl();
 }
