@@ -4,8 +4,17 @@ project(OpenGL)
 
 set(CMAKE_CXX_STANDARD 17)
 
-file(GLOB ASSETS "./assets")
-file(COPY ${ASSETS} DESTINATION ${CMAKE_BINARY_DIR})
+
+# 设置源目录和目标目录
+set(ASSET_DIR "./Assets")
+ 
+# 复制文件夹下所有文件到指定目录
+file(COPY ${ASSET_DIR}
+     DESTINATION ${CMAKE_BINARY_DIR}
+     FILE_PERMISSIONS OWNER_EXECUTE OWNER_WRITE OWNER_READ
+     GROUP_EXECUTE GROUP_READ
+     WORLD_EXECUTE WORLD_READ)
+
 
 include_directories(
 	SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/Dependencies/include
