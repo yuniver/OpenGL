@@ -58,7 +58,6 @@ Shader::Shader(const char* shaderPath)
 	ID = glCreateProgram();
 	glAttachShader(ID, vertex);
 	glAttachShader(ID, fragment);
-	glAttachShader(ID, fragment);
 	if (!geometryCode.empty())
 		glAttachShader(ID, geometry);
 	glLinkProgram(ID);

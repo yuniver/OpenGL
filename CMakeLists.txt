@@ -15,7 +15,6 @@ file(COPY ${ASSET_DIR}
      GROUP_EXECUTE GROUP_READ
      WORLD_EXECUTE WORLD_READ)
 
-
 include_directories(
 	SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/Dependencies/include
 )
@@ -25,6 +24,6 @@ link_directories(
 
 file(GLOB_RECURSE SRC_FILES "src/*.cpp")
 
-add_executable(glShadow "Application.cpp" "glad.c" ${SRC_FILES})
+add_executable(glShadow "Application.cpp" "glad.c" "stb_image.cpp" ${SRC_FILES})
 
-target_link_libraries(glShadow glfw3.lib)
+target_link_libraries(glShadow glfw3.lib SOIL.lib assimp.lib freetype.lib)

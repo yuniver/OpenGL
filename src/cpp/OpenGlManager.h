@@ -2,6 +2,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include "Camera.h"
+#include "Shader.h"
 
 class OpenGlManager
 {
@@ -22,6 +23,6 @@ public:
 
 	virtual void Update();
 	virtual void LateUpdate();
-	virtual void OnRender();
+	virtual void OnRender(Shader* shader, unsigned int &VAO);
 	virtual void OnDestroy();
 };
