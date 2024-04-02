@@ -20,10 +20,6 @@ class OpenGlManager
 public:
 	int InitOpenGl();
 
-	const char* GetVertexShader();
-	const char* GetFragmentShader();
-
-	
 	virtual void Update();
 	virtual void LateUpdate();
 	virtual void OnRender();
