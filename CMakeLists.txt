@@ -22,8 +22,12 @@ link_directories(
 	SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/Dependencies/lib
 )
 
+include_directories(
+	SYSTEM ${CMAKE_CURRENT_SOURCE_DIR}/src/Core
+)
+
 file(GLOB_RECURSE SRC_FILES "src/*.cpp")
 
-add_executable(glShadow "Application.cpp" "glad.c" "stb_image.cpp" ${SRC_FILES})
+add_executable(glShadow "EntryPoint.cpp" "glad.c" "stb_image.cpp" ${SRC_FILES} )
 
 target_link_libraries(glShadow glfw3.lib SOIL.lib assimp.lib freetype.lib)

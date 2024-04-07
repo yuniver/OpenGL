@@ -192,9 +192,14 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath, const char* geo
 		glDeleteShader(geometry);
 }
 
-void Shader::use()
+void Shader::Bind() const
 {
 	glUseProgram(ID);
+}
+
+void Shader::Unbind() const
+{
+	glUseProgram(0);
 }
 
 void Shader::setBool(const std::string& name, bool value) const
