@@ -28,6 +28,6 @@ include_directories(
 
 file(GLOB_RECURSE SRC_FILES "src/*.cpp")
 
-add_executable(glShadow "EntryPoint.cpp" "glad.c" "stb_image.cpp" ${SRC_FILES} )
+add_executable(glShadow "Start.cpp" "glad.c" "stb_image.cpp" ${SRC_FILES}  )
 
 target_link_libraries(glShadow glfw3.lib SOIL.lib assimp.lib freetype.lib)
